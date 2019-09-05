@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using Volo.Abp.Authorization.Permissions;
@@ -87,7 +88,11 @@ namespace TestProject.IdentityServer
                     apiResource.AddUserClaim(claim);
                 }
             }
-
+            var secret = "123456".Sha256();
+            if (!apiResource.Secrets.Any(p => p.Value == secret))
+            {
+                apiResource.AddSecret(secret);
+            }
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
@@ -171,6 +176,7 @@ namespace TestProject.IdentityServer
                 );
             }
 
+            client.AccessTokenType = (int) AccessTokenType.Reference;
             foreach (var scope in scopes)
             {
                 if (client.FindScope(scope) == null)

@@ -17,6 +17,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.VirtualFileSystem;
 
 namespace TestProject
@@ -78,6 +79,17 @@ namespace TestProject
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = true;
                     options.ApiName = "TestProject";
+                    options.ApiSecret = "123456";
+
+                    //This part suppose to be required. Bug of template code?
+                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+                    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+                    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+                    options.InboundJwtClaimTypeMap["phone_number_verified"] =
+                        AbpClaimTypes.PhoneNumberVerified;
+                    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
                 });
         }
 
