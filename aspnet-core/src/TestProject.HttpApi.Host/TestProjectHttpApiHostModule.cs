@@ -33,11 +33,17 @@ namespace TestProject
     {
         private const string DefaultCorsPolicyName = "Default";
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var userIdClaimType = AbpClaimTypes.UserId;
+
+            base.PreConfigureServices(context);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-
+            var userIdClaimType = AbpClaimTypes.UserId;
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
             ConfigureSwagger(context);
